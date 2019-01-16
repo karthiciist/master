@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="txt_heading">20sp</dimen>
+    <dimen name="tit">16sp</dimen>
+</resources>

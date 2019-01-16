@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "553130037803",
+    "firebase_url": "https://seskills-master.firebaseio.com",
+    "project_id": "seskills-master",
+    "storage_bucket": "seskills-master.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553130037803:android:be2be21f1af50751",
+        "android_client_info": {
+          "package_name": "com.example.gaayathri.a6eskills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553130037803-9g442nskfa5jehl326a7n0nq3t22tooi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gaayathri.a6eskills",
+            "certificate_hash": "7740d64611c4c731fcf25a959b6e1ee82b748a90"
+          }
+        },
+        {
+          "client_id": "553130037803-1kgkt2qhkmupfigak74tg12j2vp7b87b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn_tioRmxLmSxr_BaL6oGhtMAQqIiuQ6o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553130037803-1kgkt2qhkmupfigak74tg12j2vp7b87b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

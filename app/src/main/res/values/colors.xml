@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#66bb6a</color>
+
+    <color name="colorPrimaryDark">#66bb6a</color>
+    <color name="colorAccent">#ABCD0D</color>
+
+    <color name="headings">#3797CF</color>
+
+    <color name="colorWhite">#fff</color>
+    <color name="colorBlack">#000</color>
+
+    <color name="red">#FF0000</color>
+    <color name="litegrey">	#DCDCDC</color>
+    <color name="grey">#d1e441</color>
+    <color name="greyy">#696969</color>
+    <color name="darkgrey">#4b4a4a</color>
+
+
+    <color name="address">#2F7092</color>
+    <color name="gradEnd">#67EFC8</color>
+    <color name="gradStart">#63C9FF</color>
+    <color name="followersBg">#65DCE5</color>
+    <color name="followingBg">#49BEFF</color>
+
+    <color name="white">#FFFFFF</color>
+
+
+    <color name="green_400">#66bb6a</color>
+
+    <color name="colorPrimaryLight">#1e88e5</color>
+
+    <color name="light_blue_600">#039be5</color>
+
+    <color name="green_500">#4caf50</color>
+
+    <color name="blue_600">#1e88e5</color>
+    <color name="green_300">#d1e441</color>
+    <color name="green_3000">#81c784</color>
+    <color name="blue_grey_300">#A2BEB0</color>
+
+    <color name="blue_grey_400">#d1e441</color>
+    <color name="blue_grey_4000">#78909c</color>
+
+    <color name="blue_grey_50">#eceff1</color>
+
+    <color name="blue_grey_500">#d1e441</color>
+    <color name="blue_grey_5000">#607d8b</color>
+
+    <color name="blue_grey_600">#546e7a</color>
+
+    <color name="blue_grey_700">#455a64</color>
+
+    <color name="blue_grey_800">#37474f</color>
+
+    <color name="blue_grey_900">#263238</color>
+
+    <color name="green_yellow">#d1e441</color>
+    <color name="dark_slate_grey">#2B4538</color>
+
+    <color name="dark_slate_grey2">#1F3529</color>
+    <color name="lite_slate_grey">#5f8f76</color>
+
+    <color name="lite_slate_grey2">#2a4136</color>
+
+    <color name="md_grey_800">#424242</color>
+    <color name="md_grey_400">#bdbdbd</color>
+    <color name="md_green_600">#43a047</color>
+
+    <color name="textColorPrimary">#212121</color>
+</resources>

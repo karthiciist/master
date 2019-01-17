@@ -7,18 +7,38 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="10dp">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:gravity="center">
     <ImageView
         android:id="@+id/back_button"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_gravity="left"
+        android:layout_gravity="left|center"
         android:layout_marginLeft="10dp"
         android:src="@drawable/ic_arrow_back_white_24dp" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/tv_ok"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginRight="10dp"
+        android:text="OK"
+        android:fontFamily="@font/notosansbold"
+        android:gravity="center"
+        android:textColor="#ffffff"
+    android:textSize="17sp"/>
+</LinearLayout>
+
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="15dp" />
 
 
     <TextView
@@ -32,7 +52,7 @@
         android:textSize="20sp" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="15dp" />
 
    <LinearLayout
        android:layout_width="match_parent"

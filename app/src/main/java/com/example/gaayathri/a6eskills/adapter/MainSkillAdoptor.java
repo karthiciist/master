@@ -30,12 +30,15 @@ public class MainSkillAdoptor extends RecyclerView.Adapter<MainSkillAdoptor.View
         public TextView txtHeader;
         public TextView arrow;
         public View layout;
+        public  TextView selected_count;
 
         public ViewHolder(View v) {
             super(v);
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.title);
             arrow=(TextView) v.findViewById(R.id.arrow);
+            selected_count =(TextView)v.findViewById(R.id.selected_count);
+
         }
     }
 
@@ -61,6 +64,13 @@ public class MainSkillAdoptor extends RecyclerView.Adapter<MainSkillAdoptor.View
         final String name = values.get(position).getName();
 
         holder.txtHeader.setText(name);
+
+
+        String count ="";
+if(values.get(position).getChild().size() != 0) {
+    count = String.valueOf(values.get(position).getChild().size());
+}
+        holder.selected_count.setText(String.valueOf(count));
         holder.txtHeader.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

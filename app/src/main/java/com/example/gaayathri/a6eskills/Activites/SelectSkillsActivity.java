@@ -5,21 +5,24 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gaayathri.a6eskills.R;
 import com.example.gaayathri.a6eskills.SkillClickListoner;
 import com.example.gaayathri.a6eskills.Skills;
-import com.example.gaayathri.a6eskills.adapter.MainSkillAdoptor;
 import com.example.gaayathri.a6eskills.adapter.SubSkillAdoptor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectSkillsActivity extends AppCompatActivity implements  SkillClickListoner {
+public class SelectSkillsActivity extends AppCompatActivity implements SkillClickListoner {
 
-
+private TextView ok;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -28,7 +31,7 @@ public class SelectSkillsActivity extends AppCompatActivity implements  SkillCli
 
     SkillClickListoner skillClickListoner = this;
 
-
+    Integer PARENT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +47,15 @@ public class SelectSkillsActivity extends AppCompatActivity implements  SkillCli
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         List<Skills> input = (ArrayList<Skills>) args.getSerializable("ARRAYLIST");
+ PARENT = intent.getIntExtra("PARENT",0);
+
 
         findViewById(R.id.back_button).setOnClickListener(v -> {
             Intent homeintent = new Intent(SelectSkillsActivity.this, SkillsActivity.class);
             startActivity(homeintent);
         });
 
-
+ok=(TextView)findViewById(R.id.tv_ok);
         //Addded
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         // use this setting to
@@ -64,11 +69,52 @@ public class SelectSkillsActivity extends AppCompatActivity implements  SkillCli
         mAdapter = new SubSkillAdoptor(input, skillClickListoner);
         recyclerView.setAdapter(mAdapter);
 
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent= new Intent(SelectSkillsActivity.this, SkillsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                Bundle args = new Bundle();
+                args.putSerializable("SELECTEDARRAYLIST",(Serializable)selectedmainskills);
+                intent.putExtra("SELECTEDBUNDLE",args);
+                intent.putExtra("PARENT",PARENT);
+                startActivityIfNeeded(intent, 0);
+
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public void selectedSkill(Skills skills) {
+
+
+
+        selectedmainskills.add(skills);
+
     }
 
     @Override
-    public Skills selectedSkill(Skills skills) {
+    public void deselectSkill(Skills skills) {
 
-        return null;
+        List<Skills> selectedmainskillsupdated = new ArrayList<>();
+        for (Skills skill : selectedmainskills) {
+            if (skills.getId() != skill.getId()) {
+                selectedmainskillsupdated.add(skill);
+            }
+        }
+        selectedmainskills = selectedmainskillsupdated;
+    }
+
+    @Override
+    public Integer selectedCount() {
+        if(selectedmainskills.size() == 2){
+            Toast.makeText(this, "You Can Select Maximum of 2 Skills..!", Toast.LENGTH_SHORT).show();
+        }
+        return selectedmainskills.size();
     }
 }

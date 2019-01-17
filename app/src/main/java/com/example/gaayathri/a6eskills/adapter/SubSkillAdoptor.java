@@ -3,9 +3,9 @@ package com.example.gaayathri.a6eskills.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -82,13 +82,24 @@ public class SubSkillAdoptor extends RecyclerView.Adapter<SubSkillAdoptor.ViewHo
             holder.sub.setVisibility(View.VISIBLE);
         }
 
-        holder.txtHeader.setOnClickListener(new OnClickListener() {
+        holder.subskillcheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                //Interface to next
-                skillClickListoner.selectedSkill(values.get(position));
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b && skillClickListoner.selectedCount() == 2){
+                    holder.subskillcheckbox.setChecked(false);
+                return;
+                }
+                if (b) {
+                    skillClickListoner.selectedSkill(values.get(position));
+                } else {
+                    skillClickListoner.deselectSkill(values.get(position));
+                }
+
+
             }
         });
+
 
     }
 

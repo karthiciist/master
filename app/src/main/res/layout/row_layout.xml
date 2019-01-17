@@ -22,6 +22,15 @@
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/selected_count"
+        android:textSize="15sp"
+        android:fontFamily="@font/notosansbold"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:textColor="#ffffff"/>
+
+    <TextView
         android:id="@+id/arrow"
         android:background="@drawable/right"
         android:layout_width="45dp"

@@ -2,6 +2,9 @@ package com.example.gaayathri.a6eskills;
 
 public interface SkillClickListoner {
 
-    Skills selectedSkill(Skills skills);
+    void selectedSkill(Skills skills);
 
+    void deselectSkill(Skills skills);
+
+    Integer selectedCount();
 }

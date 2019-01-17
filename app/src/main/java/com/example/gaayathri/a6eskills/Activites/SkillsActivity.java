@@ -6,8 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.gaayathri.a6eskills.Fragments.SkillsViewFragment;
@@ -43,6 +45,7 @@ public class SkillsActivity extends AppCompatActivity implements SkillClickListo
     Skills skills_5;
     Skills skills_6;
     List<Skills> maininput;
+Button skillnext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,18 @@ public class SkillsActivity extends AppCompatActivity implements SkillClickListo
 
         //Added
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        skillnext =(Button)findViewById(R.id.skillnext);
+
+        skillnext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //////Next Activity Method here
+                Toast.makeText(SkillsActivity.this, getPostData(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         // use this setting to
         // improve performance if you know that changes
         // in content do not change the layout size
@@ -138,9 +153,10 @@ public class SkillsActivity extends AppCompatActivity implements SkillClickListo
     @Override
     public void selectedSkill(Skills skills) {
 
-        if(getTotelSelectedSkills() == 4 || getTotelSelectedMainSkills() == 2){
 
-            Toast.makeText(this, "You Can Only Select maximum Of 4 Sub Skills and 2 Main Skills..!", Toast.LENGTH_SHORT).show();
+        if ((getTotelSelectedSkills() == 4 || getTotelSelectedMainSkills() == 2) && skills.getChild().isEmpty()) {
+
+            Toast.makeText(this, "You Can Only Select maximum of 4 SubSkills and 2 MainSkills..!", Toast.LENGTH_SHORT).show();
 
             return;
         }
@@ -259,33 +275,103 @@ public class SkillsActivity extends AppCompatActivity implements SkillClickListo
     }
 
 
+    String getPostData() {
+
+      String  postdata = "";
+        Integer count = 0;
+
+        if (!skills_1.getChild().isEmpty()) {
+
+            List<Skills> skills = skills_1.getChild();
+
+            for (Skills skill :
+                    skills) {
+
+                postdata = postdata + "," + skill.getId();
+            }
+
+
+        }
+
+        if (!skills_2.getChild().isEmpty()) {
+            List<Skills> skills = skills_2.getChild();
+
+            for (Skills skill :
+                    skills) {
+
+                postdata = postdata + "," + skill.getId();
+            }
+        }
+
+        if (!skills_3.getChild().isEmpty()) {
+            List<Skills> skills = skills_3.getChild();
+
+            for (Skills skill :
+                    skills) {
+
+                postdata = postdata + "," + skill.getId();
+            }
+        }
+
+        if (!skills_4.getChild().isEmpty()) {
+            List<Skills> skills = skills_4.getChild();
+
+            for (Skills skill :
+                    skills) {
+
+                postdata = postdata + "," + skill.getId();
+            }
+        }
+
+        if (!skills_5.getChild().isEmpty()) {
+            List<Skills> skills = skills_5.getChild();
+
+            for (Skills skill :
+                    skills) {
+
+                postdata = postdata + "," + skill.getId();
+            }
+        }
+
+        if (!skills_6.getChild().isEmpty()) {
+            List<Skills> skills = skills_6.getChild();
+
+            for (Skills skill :
+                    skills) {
+
+                postdata = postdata + "," + skill.getId();
+            }
+        }
+      return postdata;
+    }
+
 
     Integer getTotelSelectedMainSkills() {
         Integer count = 0;
 
         if (!skills_1.getChild().isEmpty()) {
-            count = count +1;
+            count = count + 1;
         }
 
         if (!skills_2.getChild().isEmpty()) {
-            count = count +1;
+            count = count + 1;
         }
 
         if (!skills_3.getChild().isEmpty()) {
-            count = count +1;
+            count = count + 1;
         }
 
         if (!skills_4.getChild().isEmpty()) {
-            count = count +1;
+            count = count + 1;
         }
 
         if (!skills_5.getChild().isEmpty()) {
-            count = count +1;
+            count = count + 1;
 
         }
 
         if (!skills_6.getChild().isEmpty()) {
-            count = count +1;
+            count = count + 1;
         }
         return count;
     }

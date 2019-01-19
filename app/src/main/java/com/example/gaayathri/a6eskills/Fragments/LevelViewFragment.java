@@ -1,8 +1,10 @@
 package com.example.gaayathri.a6eskills.Fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.example.gaayathri.a6eskills.Activites.LoginActivity;
 import com.example.gaayathri.a6eskills.R;
 import com.example.gaayathri.a6eskills.adapter.GridListAdapter;
+import com.github.loadingview.LoadingView;
 
 import org.json.JSONObject;
 
@@ -56,17 +59,14 @@ public class LevelViewFragment extends Fragment {
     String company;
     String blackCompanies;
     String resumeUrl;
-    String mainSkill1;
-    String mainSkill2;
-    String subSkill1;
-    String subSkill2;
-    String sub2Skill1;
-    String sub2Skill2;
+    String skillsToDB;
     String level1;
     String level2;
     String password;
     String profilepicfilename;
     int countryCode;
+
+    Dialog loadingDialog;
 
     public LevelViewFragment() {
     }
@@ -89,6 +89,12 @@ public class LevelViewFragment extends Fragment {
         finishButton.setText("FINISH");
 
         client = new OkHttpClient();
+
+        loadingDialog = new Dialog(getActivity());
+        loadingDialog.setContentView(R.layout.dialog_loading);
+        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.parseColor("#801b5e20")));
+        LoadingView loadingView = loadingDialog.findViewById(R.id.loadingView);
+        loadingView.start();
 
         return view;
     }
@@ -115,203 +121,191 @@ public class LevelViewFragment extends Fragment {
     }
 
     private void onClickEvent(View view) {
-        view.findViewById(R.id.show_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SparseBooleanArray selectedRows = adapter.getSelectedIds();//Get the selected ids from adapter
-                //Check if item is selected or not via size
-                if (selectedRows.size() < 3) {
-                    StringBuilder stringBuilder = new StringBuilder();
+        view.findViewById(R.id.show_button).setOnClickListener(view1 -> {
 
-                    ArrayList<String> skillsList = new ArrayList<String>();
+            loadingDialog.show();
 
-                    //Loop to all the selected rows array
-                    for (int i = 0; i < selectedRows.size(); i++) {
-
-                        //Check if selected rows have value i.e. checked item
-                        if (selectedRows.valueAt(i)) {
-
-                            //Get the checked item text from array list by getting keyAt method of selectedRowsarray
-                            String selectedRowLabel = arrayList.get(selectedRows.keyAt(i));
-
-                            //append the row label text
-                            stringBuilder.append(selectedRowLabel + "\n");
-
-                            skillsList.add(selectedRowLabel);
-
-                        }
-                    }
-
-                    String level1 = skillsList.get(0);
-                    String level2 = null;
+            new Thread() {
+                public void run() {
                     try {
-                        level2 = skillsList.get(1);
-                    } catch (Exception e) {
 
-                    }
+                        SparseBooleanArray selectedRows = adapter.getSelectedIds();//Get the selected ids from adapter
+                        //Check if item is selected or not via size
+                        if (selectedRows.size() < 3) {
+                            StringBuilder stringBuilder = new StringBuilder();
 
-                    sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putString("level1", level1);
-                    editor.putString("level2", level2);
-                    editor.apply();
+                            ArrayList<String> skillsList = new ArrayList<String>();
 
-                    String level1DB = null;
-                    if (level1 == "Architect") {
-                        level1DB = "arch";
-                    } else if (level1 == "Lead") {
-                        level1DB = "lead";
-                    } else if (level1 == "Senior Developer") {
-                        level1DB = "srdev";
-                    } else if (level1 == "Developer") {
-                        level1DB = "dev";
-                    } else if (level1 == "Ops/Support engineer") {
-                        level1DB = "opssupport";
-                    }
+                            //Loop to all the selected rows array
+                            for (int i = 0; i < selectedRows.size(); i++) {
 
-                    String level2DB = null;
-                    if (level1 == "Architect") {
-                        level2DB = "arch";
-                    } else if (level1 == "Lead") {
-                        level2DB = "lead";
-                    } else if (level1 == "Senior Developer") {
-                        level2DB = "srdev";
-                    } else if (level1 == "Developer") {
-                        level2DB = "dev";
-                    } else if (level1 == "Ops/Support engineer") {
-                        level2DB = "opssupport";
-                    }
+                                //Check if selected rows have value i.e. checked item
+                                if (selectedRows.valueAt(i)) {
 
-                    //Toast.makeText(context, "Selected Rows\n" + stringBuilder.toString(), Toast.LENGTH_SHORT).show();
+                                    //Get the checked item text from array list by getting keyAt method of selectedRowsarray
+                                    String selectedRowLabel = arrayList.get(selectedRows.keyAt(i));
 
-                    sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
-                    name = sharedpreferences.getString("name", "");
-                    email = sharedpreferences.getString("email", "");
-                    city = sharedpreferences.getString("city", "");
-                    phone = sharedpreferences.getString("phoneNo", "");
-                    whatsappFlag = sharedpreferences.getString("whatsappFlag", "");
-                    profilePicDownloadUrl = sharedpreferences.getString("profilePicDownloadUrl", "");
-                    company = sharedpreferences.getString("company", "");
-                    blackCompanies = sharedpreferences.getString("blackCompanies", "");
-                    resumeUrl = sharedpreferences.getString("resumeDownloadUrl", "");
-                    mainSkill1 = sharedpreferences.getString("mainSkill1", "");
-                    mainSkill2 = sharedpreferences.getString("mainSkill2", "");
-                    subSkill1 = sharedpreferences.getString("subSkill1", "");
-                    subSkill2 = sharedpreferences.getString("subSkill2", "");
-                    sub2Skill1 = sharedpreferences.getString("sub2Skill1", "");
-                    sub2Skill2 = sharedpreferences.getString("sub2Skill2", "");
-                    password = sharedpreferences.getString("password", "");
-                    countryCode = sharedpreferences.getInt("countryCode", 91);
-                    profilepicfilename = sharedpreferences.getString("profilepicfilename", "");
-                    //String level1 = sharedpreferences.getString("level1", "");
-                    //String level2 = sharedpreferences.getString("level2", "");
+                                    //append the row label text
+                                    stringBuilder.append(selectedRowLabel + "\n");
 
-                    String mainSkill1DB = null;
-                    mainSkill1DB = getDBShortName(mainSkill1);
+                                    skillsList.add(selectedRowLabel);
 
-                    String mainSkill2DB = null;
-                    mainSkill2DB = getDBShortName(mainSkill2);
-
-                    String subSkill1DB = null;
-                    subSkill1DB = getDBShortName(subSkill1);
-
-                    String subSkill2DB = null;
-                    subSkill2DB = getDBShortName(subSkill2);
-
-                    String subSkill3DB = null;
-                    subSkill3DB = getDBShortName(sub2Skill1);
-
-                    String subSkill4DB = null;
-                    subSkill4DB = getDBShortName(sub2Skill2);
-
-                    String skills = mainSkill1DB + "," + mainSkill2DB + "," + subSkill1DB + "," + subSkill2DB + "," + subSkill3DB + "," + subSkill4DB;
-                    String levels = level1DB + "," + level2DB;
-
-                    //  RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
-                    RequestBody formBody = new FormBody.Builder()
-                            .add("name", name)
-                            .add("email", email)
-                            .add("city", city)
-                            .add("phone", phone)
-                            .add("whatsappflag", whatsappFlag)
-                            .add("notinterviewfor", blackCompanies)
-                            .add("skills", skills)
-                            .add("resume", resumeUrl)
-                            .add("password", password)
-                            .add("countrycode", String.valueOf(countryCode))
-                            .add("resumeurl", resumeUrl)
-                            .add("company", company)
-                            .add("profilepicurl", profilePicDownloadUrl)
-                            .add("level", levels)
-                            .add("profilepicfilename", profilepicfilename)
-                            .build();
-
-
-                    final Request request = new Request.Builder()
-                            .url("http://6eskills.com:8080/uat/api/v1/user/signup/submit")
-                            .post(formBody)
-                            .addHeader("cache-control", "no-cache")
-                            .build();
-
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            String mMessage = e.getMessage();
-                            Log.w("failure Response", mMessage);
-                            Toast.makeText(getActivity(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-
-                            String mMessage = response.body().string();
-                            if (response.isSuccessful()) {
-                                try {
-                                    JSONObject json = new JSONObject(mMessage);
-                                    final String serverResponse = json.getString("Your Index");
-                                    Toast.makeText(getActivity(), "placed", Toast.LENGTH_SHORT).show();
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
                             }
 
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            String level1 = skillsList.get(0);
+                            String level2 = null;
+                            try {
+                                level2 = skillsList.get(1);
+                            } catch (Exception e) {
+
+                            }
+
+                            sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("level1", level1);
+                            editor.putString("level2", level2);
+                            editor.apply();
+
+                            String level1DB = null;
+                            if (level1 == "Architect") {
+                                level1DB = "arch";
+                            } else if (level1 == "Lead") {
+                                level1DB = "lead";
+                            } else if (level1 == "Senior Developer") {
+                                level1DB = "srdev";
+                            } else if (level1 == "Developer") {
+                                level1DB = "dev";
+                            } else if (level1 == "Ops/Support engineer") {
+                                level1DB = "opssupport";
+                            }
+
+                            String level2DB = null;
+                            if (level1 == "Architect") {
+                                level2DB = "arch";
+                            } else if (level1 == "Lead") {
+                                level2DB = "lead";
+                            } else if (level1 == "Senior Developer") {
+                                level2DB = "srdev";
+                            } else if (level1 == "Developer") {
+                                level2DB = "dev";
+                            } else if (level1 == "Ops/Support engineer") {
+                                level2DB = "opssupport";
+                            }
+
+                            //Toast.makeText(context, "Selected Rows\n" + stringBuilder.toString(), Toast.LENGTH_SHORT).show();
+
+                            sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
+                            name = sharedpreferences.getString("name", "");
+                            email = sharedpreferences.getString("email", "");
+                            city = sharedpreferences.getString("city", "");
+                            phone = sharedpreferences.getString("phoneNo", "");
+                            whatsappFlag = sharedpreferences.getString("whatsappFlag", "");
+                            profilePicDownloadUrl = sharedpreferences.getString("profilePicDownloadUrl", "");
+                            company = sharedpreferences.getString("company", "");
+                            blackCompanies = sharedpreferences.getString("blackCompanies", "");
+                            resumeUrl = sharedpreferences.getString("resumeDownloadUrl", "");
+                            skillsToDB = sharedpreferences.getString("skillsToDB", "");
+                            password = sharedpreferences.getString("password", "");
+                            countryCode = sharedpreferences.getInt("countryCode", 91);
+                            profilepicfilename = sharedpreferences.getString("profilepicfilename", "");
+                            //String level1 = sharedpreferences.getString("level1", "");
+                            //String level2 = sharedpreferences.getString("level2", "");
+
+                            String levels = level1DB + "," + level2DB;
+
+                            //  RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
+                            RequestBody formBody = new FormBody.Builder()
+                                    .add("name", name)
+                                    .add("email", email)
+                                    .add("city", city)
+                                    .add("phone", phone)
+                                    .add("whatsappflag", whatsappFlag)
+                                    .add("notinterviewfor", blackCompanies)
+                                    .add("skills", skillsToDB)
+                                    .add("resume", resumeUrl)
+                                    .add("password", password)
+                                    .add("countrycode", String.valueOf(countryCode))
+                                    .add("resumeurl", resumeUrl)
+                                    .add("company", company)
+                                    .add("profilepicurl", profilePicDownloadUrl)
+                                    .add("level", levels)
+                                    .add("profilepicfilename", profilepicfilename)
+                                    .build();
+
+
+                            final Request request = new Request.Builder()
+                                    .url("http://6eskills.com:8080/uat/api/v1/user/signup/submit")
+                                    .post(formBody)
+                                    .addHeader("cache-control", "no-cache")
+                                    .build();
+
+                            client.newCall(request).enqueue(new Callback() {
                                 @Override
-                                public void run() {
-                                    //Toast.makeText(getActivity(), mMessage, Toast.LENGTH_SHORT).show();
+                                public void onFailure(Call call, IOException e) {
+                                    String mMessage = e.getMessage();
+                                    Log.w("failure Response", mMessage);
+                                    Toast.makeText(getActivity(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                                }
 
-                                    sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
-                                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                                    editor.putString("serverMsg", mMessage);
-                                    editor.apply();
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
 
-                                    if (mMessage.contains("Already")){
-                                        Toast.makeText(getActivity(), "Phone no already registered. Login to continue", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getActivity(), "Please login to continue", Toast.LENGTH_SHORT).show();
+                                    String mMessage = response.body().string();
+                                    if (response.isSuccessful()) {
+                                        try {
+                                            JSONObject json = new JSONObject(mMessage);
+                                            final String serverResponse = json.getString("Your Index");
+                                            Toast.makeText(getActivity(), "placed", Toast.LENGTH_SHORT).show();
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                     }
+
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //Toast.makeText(getActivity(), mMessage, Toast.LENGTH_SHORT).show();
+
+                                            sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
+                                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                                            editor.putString("serverMsg", mMessage);
+                                            editor.apply();
+
+                                            if (mMessage.contains("Already")){
+                                                Toast.makeText(getActivity(), "Phone no already registered. Login to continue", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getActivity(), "Please login to continue", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+                                    Intent homeintent = new Intent(getActivity(), LoginActivity.class);
+                                    startActivity(homeintent);
+                                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+
                                 }
                             });
 
-                            Intent homeintent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(homeintent);
-                            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+                        } else if (selectedRows.size() == 0) {
+
+                            Toast.makeText(context, "Please select atleast one level", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                            Toast.makeText(context, "You Can Select Only Maximum of 2 Levels", Toast.LENGTH_SHORT).show();
 
                         }
-                    });
 
-                } else if (selectedRows.size() == 0) {
-
-                    Toast.makeText(context, "Please select atleast one level", Toast.LENGTH_SHORT).show();
-
-                } else {
-
-                    Toast.makeText(context, "Select only two levels", Toast.LENGTH_SHORT).show();
-
+                    } catch (Exception e) {
+                        Log.e("tag",e.getMessage());
+                    }
+                    // dismiss the progress dialog
+                    loadingDialog.dismiss();
                 }
+            }.start();
 
-            }
         });
 
     }

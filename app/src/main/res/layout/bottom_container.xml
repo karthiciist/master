@@ -6,8 +6,8 @@
     android:orientation="horizontal">
 
 
-    <Button
-        android:id="@+id/show_button"
+    <!--<Button
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -15,7 +15,17 @@
         android:text="Next"
         android:textSize="20sp"
         android:textColor="@color/dark_slate_grey"
-        android:background="@drawable/button_round_corner_green"/>
+        android:background="@drawable/button_round_corner_green"/>-->
+
+    <Button
+        android:id="@+id/show_button"
+        android:text="Next"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/button_round_corner_green"
+        android:fontFamily="@font/notosansregular"
+        android:textColor="@color/dark_slate_grey"
+        android:textSize="14sp" />
 
 
 </LinearLayout>

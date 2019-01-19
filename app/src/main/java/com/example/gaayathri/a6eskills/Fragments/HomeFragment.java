@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
 
 
 
-        if(profilepicurl.equals("null")){
+        if(profilepicurl.equals("")){
             //Toast.makeText(getActivity(), "url: " + profilepicurl, Toast.LENGTH_SHORT).show();
             profilepicurl = "https://firebasestorage.googleapis.com/v0/b/seskills-master.appspot.com/o/boss.png?alt=media&token=7f1d6ae9-6d63-486a-8795-2229981b0989";
         }
@@ -65,6 +65,8 @@ public class HomeFragment extends Fragment {
         final RequestOptions options = new RequestOptions();
         options.centerCrop();
         Glide.with(getActivity()).load(profilepicurl).apply(options).into(CircularImageView);
+
+        //Toast.makeText(getActivity(), "URL: " + profilepicurl, Toast.LENGTH_SHORT).show();
 
 
         Button btnMore = view.findViewById(R.id.button8);

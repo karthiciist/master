@@ -17,6 +17,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:overrideLibrary="android.support.design">
+        <activity android:name=".Activites.ChangePasswordActivity"></activity>
+        <activity android:name=".Activites.ForgotPasswordOTPEntryActivity" />
+        <activity android:name=".Activites.RegisterPopupActivity" />
         <activity android:name=".Activites.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

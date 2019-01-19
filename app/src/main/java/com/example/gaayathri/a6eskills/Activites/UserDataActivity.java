@@ -146,7 +146,6 @@ public class UserDataActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     phoneVerificationDialog = new Dialog(UserDataActivity.this);
-                    phoneVerificationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     phoneVerificationDialog.setContentView(R.layout.dialog_phone_verification);
 
                     LinearLayout otpET = phoneVerificationDialog.findViewById(R.id.otpET);
@@ -176,25 +175,32 @@ public class UserDataActivity extends AppCompatActivity {
                     btnSend.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //Toast.makeText(UserDataActivity.this, "OTP sent", Toast.LENGTH_SHORT).show();
-                            otpET.setVisibility(View.VISIBLE);
 
-                            int countryCode = ccpDialog.getSelectedCountryCodeAsInt();
                             String phoneNumber = et_phoneno.getText().toString();
 
-                            String fullNumber = countryCode + phoneNumber;
+                            if (!phoneNumber.equals("")){
+                                //Toast.makeText(UserDataActivity.this, "OTP sent", Toast.LENGTH_SHORT).show();
+                                otpET.setVisibility(View.VISIBLE);
 
-                            PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                                    fullNumber,                     // Phone number to verify
-                                    60,                           // Timeout duration
-                                    TimeUnit.SECONDS,                // Unit of timeout
-                                    UserDataActivity.this,        // Activity (for callback binding)
-                                    mCallback);                      // OnVerificationStateChangedCallbacks
+                                int countryCode = ccpDialog.getSelectedCountryCodeAsInt();
+                                //String phoneNumber = et_phoneno.getText().toString();
 
-                            btnVerify.setVisibility(View.VISIBLE);
-                            btnResend.setVisibility(View.VISIBLE);
+                                String fullNumber = countryCode + phoneNumber;
 
-                            btnSend.setVisibility(View.GONE);
+                                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                                        fullNumber,                     // Phone number to verify
+                                        60,                           // Timeout duration
+                                        TimeUnit.SECONDS,                // Unit of timeout
+                                        UserDataActivity.this,        // Activity (for callback binding)
+                                        mCallback);                      // OnVerificationStateChangedCallbacks
+
+                                btnVerify.setVisibility(View.VISIBLE);
+                                btnResend.setVisibility(View.VISIBLE);
+
+                                btnSend.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(UserDataActivity.this, "Kindly Enter Phone Number !", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 
@@ -208,7 +214,7 @@ public class UserDataActivity extends AppCompatActivity {
                                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, Otp);
                                 SigninWithPhone(credential);
                             } catch (Exception e) {
-                                Toast.makeText(UserDataActivity.this, "Please Check The OTP Entered", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserDataActivity.this, "Please check the details entered", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -216,7 +222,7 @@ public class UserDataActivity extends AppCompatActivity {
                     btnResend.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(UserDataActivity.this, "Please Try After 60 Seconds", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserDataActivity.this, "Please try again after 60 seconds", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -234,36 +240,53 @@ public class UserDataActivity extends AppCompatActivity {
             String passwordSP = et_password.getText().toString();
             String phoneNoSP = et_phone.getText().toString();
 
-           // if (!(key == "Verified")) {
-                if ((key == "Verified")) {
-                Toast.makeText(this, "Verify Your Mobile Number", Toast.LENGTH_SHORT).show();
-            } else if ((nameSP.equals("")) || (emailSP.equals("")) || (passwordSP.equals("")) || (phoneNoSP.equals(""))) {
-                Toast.makeText(this, "Kindly Fill All Fields..!", Toast.LENGTH_SHORT).show();
+            if ((nameSP.equals("")) || (emailSP.equals("")) || (passwordSP.equals("")) || (phoneNoSP.equals(""))) {
+                Toast.makeText(this, "Kindly Fill All Fields !", Toast.LENGTH_SHORT).show();
+            } else if (!(key == "Verified")) {
+                Toast.makeText(this, "Verify phone number", Toast.LENGTH_SHORT).show();
+            } else if (!isEmailValid(emailSP)){
+                Toast.makeText(this, "Invalid Email ID", Toast.LENGTH_SHORT).show();
             } else {
-                int countryCodeSP = ccp.getSelectedCountryCodeAsInt();
 
-                CheckBox whatsapp = findViewById(R.id.whatsappFlag);
+                int nameLen = nameSP.length();
+                int emailLen = emailSP.length();
+                int passwordLen = passwordSP.length();
 
-                if (whatsapp.isChecked()) {
-                    whatsappFlag = "Y";
+                if (nameLen > 75) {
+                    Toast.makeText(this, "Maximum 75 Characters are allowed !", Toast.LENGTH_SHORT).show();
+                } else if (emailLen > 75) {
+                    Toast.makeText(this, "Maximum 75 Characters are allowed !", Toast.LENGTH_SHORT).show();
+                } else if (passwordLen < 6){
+                    Toast.makeText(this, "Password Should Be 6 to 12 Character Length !", Toast.LENGTH_SHORT).show();
+                } else if (passwordLen > 12) {
+                    Toast.makeText(this, "Password Should Be 6 to 12 Character Length !", Toast.LENGTH_SHORT).show();
                 } else {
-                    whatsappFlag = "N";
+                    int countryCodeSP = ccp.getSelectedCountryCodeAsInt();
+
+                    CheckBox whatsapp = findViewById(R.id.whatsappFlag);
+
+                    if (whatsapp.isChecked()) {
+                        whatsappFlag = "Y";
+                    } else {
+                        whatsappFlag = "N";
+                    }
+
+                    sharedpreferences = UserDataActivity.this.getSharedPreferences("mypref", 0); // 0 - for private mode
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("name", nameSP);
+                    editor.putString("email", emailSP);
+                    editor.putString("password", passwordSP);
+                    editor.putString("phoneNo", phoneNoSP);
+                    editor.putString("whatsappFlag", whatsappFlag);
+                    editor.putInt("countryCode", countryCodeSP);
+
+                    editor.apply();
+
+                    Intent homeintent = new Intent(UserDataActivity.this, UserMoreDataActivity.class);
+                    startActivity(homeintent);
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+
                 }
-
-                sharedpreferences = UserDataActivity.this.getSharedPreferences("mypref", 0); // 0 - for private mode
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("name", nameSP);
-                editor.putString("email", emailSP);
-                editor.putString("password", passwordSP);
-                editor.putString("phoneNo", phoneNoSP);
-                editor.putString("whatsappFlag", whatsappFlag);
-                editor.putInt("countryCode", countryCodeSP);
-
-                editor.apply();
-
-                Intent homeintent = new Intent(UserDataActivity.this, UserMoreDataActivity.class);
-                startActivity(homeintent);
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
             }
         });
 
@@ -373,7 +396,7 @@ public class UserDataActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //startActivity(new Intent(VerificationActivity.this,SignedIn.class));
                             //finish();
-                            Toast.makeText(UserDataActivity.this,"Verification successful",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserDataActivity.this,"OTP Verified Successfully !",Toast.LENGTH_SHORT).show();
 
                             ImageView iv = phoneVerificationDialog.findViewById(R.id.iv);
                             iv.setImageDrawable(getDrawable(R.drawable.tick));
@@ -391,6 +414,10 @@ public class UserDataActivity extends AppCompatActivity {
                                 public void onClick(View v) {
                                     FirebaseAuth.getInstance().signOut();
                                     phoneVerificationDialog.dismiss();
+
+                                    EditText et_phone = findViewById(R.id.et_phone);
+                                    et_phone.setEnabled(false);
+
                                 }
                             });
 
@@ -417,7 +444,7 @@ public class UserDataActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                Toast.makeText(UserDataActivity.this,"verification completed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserDataActivity.this,"OTP Verified Successfully !",Toast.LENGTH_SHORT).show();
 
                 ImageView iv = phoneVerificationDialog.findViewById(R.id.iv);
                 iv.setImageDrawable(getDrawable(R.drawable.tick));
@@ -442,6 +469,9 @@ public class UserDataActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         FirebaseAuth.getInstance().signOut();
                         phoneVerificationDialog.dismiss();
+
+                        EditText et_phone = findViewById(R.id.et_phone);
+                        et_phone.setEnabled(false);
                     }
                 });
 
@@ -449,16 +479,20 @@ public class UserDataActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(UserDataActivity.this,"verification failed: " + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserDataActivity.this,"Kindly check the number entered !", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
-                Toast.makeText(UserDataActivity.this,"OTP Sent..!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserDataActivity.this,"OTP Sent !",Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
 }

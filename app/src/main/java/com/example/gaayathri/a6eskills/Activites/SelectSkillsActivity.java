@@ -53,6 +53,7 @@ private TextView ok;
         findViewById(R.id.back_button).setOnClickListener(v -> {
             Intent homeintent = new Intent(SelectSkillsActivity.this, SkillsActivity.class);
             startActivity(homeintent);
+            SelectSkillsActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         });
 
 ok=(TextView)findViewById(R.id.tv_ok);
@@ -81,6 +82,7 @@ ok=(TextView)findViewById(R.id.tv_ok);
                 intent.putExtra("SELECTEDBUNDLE",args);
                 intent.putExtra("PARENT",PARENT);
                 startActivityIfNeeded(intent, 0);
+                SelectSkillsActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
 
             }

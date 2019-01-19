@@ -1,6 +1,7 @@
 package com.example.gaayathri.a6eskills.Activites;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class SkillsActivity extends AppCompatActivity implements SkillClickListo
 
     SkillClickListoner skillClickListoner = this;
 
+    SharedPreferences sharedpreferences;
 
     Skills skills_1;
     Skills skills_2;
@@ -75,7 +77,21 @@ Button skillnext;
             public void onClick(View view) {
 
                 //////Next Activity Method here
-                Toast.makeText(SkillsActivity.this, getPostData(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(SkillsActivity.this, getPostData(), Toast.LENGTH_SHORT).show();
+
+                String skillsString = getPostData();
+                String skillsToDB = skillsString.startsWith(",") ? skillsString.substring(1) : skillsString;
+
+                Toast.makeText(SkillsActivity.this, skillsToDB, Toast.LENGTH_SHORT).show();
+
+                sharedpreferences = getSharedPreferences("mypref", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("skillsToDB", skillsToDB);
+                editor.apply();
+
+                Intent homeintent = new Intent(SkillsActivity.this, LevelActivity.class);
+                startActivity(homeintent);
+                SkillsActivity.this.overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
 
             }
         });
@@ -172,6 +188,7 @@ Button skillnext;
             intent.putExtra("BUNDLE", args);
             intent.putExtra("PARENT", skills.getId());
             startActivity(intent);
+            SkillsActivity.this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
 
 
         } catch (JSONException e) {
@@ -278,7 +295,7 @@ Button skillnext;
     String getPostData() {
 
       String  postdata = "";
-        Integer count = 0;
+      Integer count = 0;
 
         if (!skills_1.getChild().isEmpty()) {
 

@@ -33,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 
 public class UserMoreDataActivity extends AppCompatActivity implements View.OnClickListener {
@@ -103,21 +105,29 @@ public class UserMoreDataActivity extends AppCompatActivity implements View.OnCl
 
             if ((company.length() != 0) & (city.length() != 0)){
 
-                sharedpreferences = UserMoreDataActivity.this.getSharedPreferences("mypref", 0); // 0 - for private mode
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("company", company);
-                editor.putString("blackCompanies", blackCompanies);
-                editor.putString("resumeDownloadUrl", downloadUrl);
-                editor.putString("city", city);
-                editor.apply();
-                if (uri != null) {
+                TextView resumeName = findViewById(R.id.resumeName);
+                String nameOfResume = resumeName.getText().toString();
+
+                if (nameOfResume.equals("No File Chosen")){
+                    Toast.makeText(this, "Kindly Upload Resume !", Toast.LENGTH_SHORT).show();
+                } else {
+                    sharedpreferences = UserMoreDataActivity.this.getSharedPreferences("mypref", 0); // 0 - for private mode
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("company", company);
+                    editor.putString("blackCompanies", blackCompanies);
+                    editor.putString("resumeDownloadUrl", downloadUrl);
+                    editor.putString("city", city);
+                    editor.apply();
+                /*if (uri != null) {
                     uploadFile(uri);
+                }*/
+                    Intent homeintent = new Intent(UserMoreDataActivity.this, SkillsActivity.class);
+                    startActivity(homeintent);
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
                 }
-                Intent homeintent = new Intent(UserMoreDataActivity.this, SkillsActivity.class);
-                startActivity(homeintent);
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+
             } else {
-                Toast.makeText(this, "Please Fill All Fields..!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Kindly Fill All Fields..!", Toast.LENGTH_SHORT).show();
             }
 
 

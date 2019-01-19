@@ -26,7 +26,7 @@ public class LevelActivity extends AppCompatActivity {
         setupViewPager(viewPager);
 
         findViewById(R.id.back_button).setOnClickListener(v -> {
-            Intent homeintent = new Intent(LevelActivity.this, UserMoreDataActivity.class);
+            Intent homeintent = new Intent(LevelActivity.this, SkillsActivity.class);
             startActivity(homeintent);
             LevelActivity.this.overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_left);
         });

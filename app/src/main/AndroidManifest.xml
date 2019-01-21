@@ -17,15 +17,19 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:overrideLibrary="android.support.design">
-        <activity android:name=".Activites.ChangePasswordActivity"></activity>
-        <activity android:name=".Activites.ForgotPasswordOTPEntryActivity" />
-        <activity android:name=".Activites.RegisterPopupActivity" />
-        <activity android:name=".Activites.MainActivity">
+        <activity android:name=".Activites.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Activites.RedeemActivity" />
+        <activity android:name=".Activites.ChangePasswordActivity" />
+        <activity android:name=".Activites.ForgotPasswordOTPEntryActivity" />
+        <activity android:name=".Activites.RegisterPopupActivity" />
+        <activity android:name=".Activites.MainActivity">
+
         </activity>
         <activity
             android:name=".Activites.LoginActivity"
@@ -46,7 +50,7 @@
         <activity
             android:name=".Activites.SelectSkillsActivity"
             android:label="@string/title_activity_select_skills"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

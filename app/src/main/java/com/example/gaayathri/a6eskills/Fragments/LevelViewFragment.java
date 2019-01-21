@@ -245,7 +245,8 @@ public class LevelViewFragment extends Fragment {
                                 public void onFailure(Call call, IOException e) {
                                     String mMessage = e.getMessage();
                                     Log.w("failure Response", mMessage);
-                                    Toast.makeText(getActivity(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show());
+
                                 }
 
                                 @Override
@@ -256,7 +257,7 @@ public class LevelViewFragment extends Fragment {
                                         try {
                                             JSONObject json = new JSONObject(mMessage);
                                             final String serverResponse = json.getString("Your Index");
-                                            Toast.makeText(getActivity(), "placed", Toast.LENGTH_SHORT).show();
+                                            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "placed", Toast.LENGTH_SHORT).show());
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -266,7 +267,6 @@ public class LevelViewFragment extends Fragment {
                                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            //Toast.makeText(getActivity(), mMessage, Toast.LENGTH_SHORT).show();
 
                                             sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
                                             SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -274,9 +274,21 @@ public class LevelViewFragment extends Fragment {
                                             editor.apply();
 
                                             if (mMessage.contains("Already")){
-                                                Toast.makeText(getActivity(), "Phone no already registered. Login to continue", Toast.LENGTH_SHORT).show();
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getActivity(), "Phone no already registered. Login to continue", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
                                             } else {
-                                                Toast.makeText(getActivity(), "Please login to continue", Toast.LENGTH_SHORT).show();
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getActivity(), "Please login to continue", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
                                             }
                                         }
                                     });
@@ -289,13 +301,9 @@ public class LevelViewFragment extends Fragment {
                             });
 
                         } else if (selectedRows.size() == 0) {
-
-                            Toast.makeText(context, "Please select atleast one level", Toast.LENGTH_SHORT).show();
-
+                            getActivity().runOnUiThread(() -> Toast.makeText(context, "Please select atleast one level", Toast.LENGTH_SHORT).show());
                         } else {
-
-                            Toast.makeText(context, "You Can Select Only Maximum of 2 Levels", Toast.LENGTH_SHORT).show();
-
+                            getActivity().runOnUiThread(() -> Toast.makeText(context, "You Can Select Only Maximum of 2 Levels", Toast.LENGTH_SHORT).show());
                         }
 
                     } catch (Exception e) {

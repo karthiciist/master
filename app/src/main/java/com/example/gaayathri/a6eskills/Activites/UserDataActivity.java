@@ -109,15 +109,9 @@ public class UserDataActivity extends AppCompatActivity {
 
         Button btnNext = findViewById(R.id.btnNext);
         verify = findViewById(R.id.verify);
-        //verify.setText("Verified");
 
         profilePic = findViewById(R.id.profilePic);
-        profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionRG();
-            }
-        });
+        profilePic.setOnClickListener(v -> checkPermissionRG());
 
         sharedpreferences = UserDataActivity.this.getSharedPreferences("mypref", 0); // 0 - for private mode
         verified = sharedpreferences.getString("verified", "0");
@@ -127,7 +121,6 @@ public class UserDataActivity extends AppCompatActivity {
         phoneNo = sharedpreferences.getString("phoneNo", "");
         countryCode = sharedpreferences.getInt("countryCode", 91);
 
-
         et_name.setText(name);
         et_email.setText(email);
         et_password.setText(password);
@@ -135,106 +128,95 @@ public class UserDataActivity extends AppCompatActivity {
         ccp.setCountryForPhoneCode(countryCode);
 
         if (verified == "1") {
-
             verify.setText("Verified");
             verify.setTextColor(getResources().getColor(R.color.green_400));
-
         } else {
+            verify.setOnClickListener(v -> {
 
-            verify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                phoneVerificationDialog = new Dialog(UserDataActivity.this);
+                phoneVerificationDialog.setContentView(R.layout.dialog_phone_verification);
 
-                    phoneVerificationDialog = new Dialog(UserDataActivity.this);
-                    phoneVerificationDialog.setContentView(R.layout.dialog_phone_verification);
+                LinearLayout otpET = phoneVerificationDialog.findViewById(R.id.otpET);
+                otpET.setVisibility(View.GONE);
 
-                    LinearLayout otpET = phoneVerificationDialog.findViewById(R.id.otpET);
-                    otpET.setVisibility(View.GONE);
+                phoneVerificationDialog.show();
 
-                    //EditText et_phonenoEditText = phoneVerificationDialog.findViewById(R.id.et_phoneno);
+                Button btnVerify = phoneVerificationDialog.findViewById(R.id.btnVerify);
+                Button btnResend = phoneVerificationDialog.findViewById(R.id.btnResend);
+                Button btnBack = phoneVerificationDialog.findViewById(R.id.btnBack);
+                ccpDialog = phoneVerificationDialog.findViewById(R.id.ccpDialog);
+                ccpDialog.setCountryForPhoneCode(ccp.getSelectedCountryCodeAsInt());
 
+                btnVerify.setVisibility(View.GONE);
+                btnResend.setVisibility(View.GONE);
+                btnBack.setVisibility(View.GONE);
 
-                    phoneVerificationDialog.show();
+                Button btnSend = phoneVerificationDialog.findViewById(R.id.btnSend);
 
-                    Button btnVerify = phoneVerificationDialog.findViewById(R.id.btnVerify);
-                    Button btnResend = phoneVerificationDialog.findViewById(R.id.btnResend);
-                    Button btnBack = phoneVerificationDialog.findViewById(R.id.btnBack);
-                    ccpDialog = phoneVerificationDialog.findViewById(R.id.ccpDialog);
-                    ccpDialog.setCountryForPhoneCode(ccp.getSelectedCountryCodeAsInt());
+                EditText et_phoneno = phoneVerificationDialog.findViewById(R.id.et_phoneno);
 
-                    btnVerify.setVisibility(View.GONE);
-                    btnResend.setVisibility(View.GONE);
-                    btnBack.setVisibility(View.GONE);
+                et_phoneno.setText(et_phone.getText().toString());
 
-                    Button btnSend = phoneVerificationDialog.findViewById(R.id.btnSend);
+                btnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    EditText et_phoneno = phoneVerificationDialog.findViewById(R.id.et_phoneno);
+                        String phoneNumber = et_phoneno.getText().toString();
 
-                    et_phoneno.setText(et_phone.getText().toString());
+                        if (!phoneNumber.equals("")){
+                            //Toast.makeText(UserDataActivity.this, "OTP sent", Toast.LENGTH_SHORT).show();
+                            otpET.setVisibility(View.VISIBLE);
 
-                    btnSend.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                            int countryCode = ccpDialog.getSelectedCountryCodeAsInt();
+                            //String phoneNumber = et_phoneno.getText().toString();
 
-                            String phoneNumber = et_phoneno.getText().toString();
+                            String fullNumber = countryCode + phoneNumber;
 
-                            if (!phoneNumber.equals("")){
-                                //Toast.makeText(UserDataActivity.this, "OTP sent", Toast.LENGTH_SHORT).show();
-                                otpET.setVisibility(View.VISIBLE);
+                            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                                    fullNumber,                     // Phone number to verify
+                                    60,                           // Timeout duration
+                                    TimeUnit.SECONDS,                // Unit of timeout
+                                    UserDataActivity.this,        // Activity (for callback binding)
+                                    mCallback);                      // OnVerificationStateChangedCallbacks
 
-                                int countryCode = ccpDialog.getSelectedCountryCodeAsInt();
-                                //String phoneNumber = et_phoneno.getText().toString();
+                            btnVerify.setVisibility(View.VISIBLE);
+                            btnResend.setVisibility(View.VISIBLE);
 
-                                String fullNumber = countryCode + phoneNumber;
-
-                                PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                                        fullNumber,                     // Phone number to verify
-                                        60,                           // Timeout duration
-                                        TimeUnit.SECONDS,                // Unit of timeout
-                                        UserDataActivity.this,        // Activity (for callback binding)
-                                        mCallback);                      // OnVerificationStateChangedCallbacks
-
-                                btnVerify.setVisibility(View.VISIBLE);
-                                btnResend.setVisibility(View.VISIBLE);
-
-                                btnSend.setVisibility(View.GONE);
-                            } else {
-                                Toast.makeText(UserDataActivity.this, "Kindly Enter Phone Number !", Toast.LENGTH_SHORT).show();
-                            }
+                            btnSend.setVisibility(View.GONE);
+                        } else {
+                            Toast.makeText(UserDataActivity.this, "Kindly Enter Phone Number !", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                });
 
-                    btnVerify.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            PinEntryEditText txt_pin_entry = phoneVerificationDialog.findViewById(R.id.txt_pin_entry);
-                            String Otp = txt_pin_entry.getText().toString();
+                btnVerify.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PinEntryEditText txt_pin_entry = phoneVerificationDialog.findViewById(R.id.txt_pin_entry);
+                        String Otp = txt_pin_entry.getText().toString();
 
-                            try {
-                                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, Otp);
-                                SigninWithPhone(credential);
-                            } catch (Exception e) {
-                                Toast.makeText(UserDataActivity.this, "Please check the details entered", Toast.LENGTH_SHORT).show();
-                            }
+                        try {
+                            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, Otp);
+                            SigninWithPhone(credential);
+                        } catch (Exception e) {
+                            Toast.makeText(UserDataActivity.this, "Please check the details entered", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                });
 
-                    btnResend.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(UserDataActivity.this, "Please try again after 60 seconds", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                btnResend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(UserDataActivity.this, "Please try again after 60 seconds", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-                }
             });
-
         }
 
         btnNext.setOnClickListener(v -> {
 
             String key = verify.getText().toString();
-
             String nameSP = et_name.getText().toString();
             String emailSP = et_email.getText().toString();
             String passwordSP = et_password.getText().toString();
@@ -247,7 +229,6 @@ public class UserDataActivity extends AppCompatActivity {
             } else if (!isEmailValid(emailSP)){
                 Toast.makeText(this, "Invalid Email ID", Toast.LENGTH_SHORT).show();
             } else {
-
                 int nameLen = nameSP.length();
                 int emailLen = emailSP.length();
                 int passwordLen = passwordSP.length();

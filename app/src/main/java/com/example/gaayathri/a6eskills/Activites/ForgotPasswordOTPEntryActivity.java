@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaayathri.a6eskills.R;
@@ -30,11 +33,16 @@ public class ForgotPasswordOTPEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_forgot_password_otpentry);
 
         StartFirebaseLogin();
 
         Button btnVerify = findViewById(R.id.btnVerify);
+        TextView resend = findViewById(R.id.resend);
 
         String fullPhoneNumber = getIntent().getExtras().getString("fullPhoneNumber");
 
@@ -55,10 +63,24 @@ public class ForgotPasswordOTPEntryActivity extends AppCompatActivity {
                     PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, Otp);
                     SigninWithPhone(credential);
                 } catch (Exception e) {
-                    Toast.makeText(ForgotPasswordOTPEntryActivity.this, "Please check the details entered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordOTPEntryActivity.this, "Please Check the Details Entered", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        resend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                        fullPhoneNumber,                     // Phone number to verify
+                        60,                           // Timeout duration
+                        TimeUnit.SECONDS,                // Unit of timeout
+                        ForgotPasswordOTPEntryActivity.this,        // Activity (for callback binding)
+                        mCallback);                      // OnVerificationStateChangedCallbacks
+            }
+        });
+
+
 
     }
 
@@ -70,7 +92,7 @@ public class ForgotPasswordOTPEntryActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //startActivity(new Intent(VerificationActivity.this,SignedIn.class));
                             //finish();
-                            Toast.makeText(ForgotPasswordOTPEntryActivity.this,"Verification successful",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ForgotPasswordOTPEntryActivity.this,"Verification Successful",Toast.LENGTH_SHORT).show();
                             FirebaseAuth.getInstance().signOut();
                             Intent intent = new Intent(ForgotPasswordOTPEntryActivity.this, ChangePasswordActivity.class);
                             startActivity(intent);
@@ -90,20 +112,25 @@ public class ForgotPasswordOTPEntryActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                Toast.makeText(ForgotPasswordOTPEntryActivity.this,"verification completed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForgotPasswordOTPEntryActivity.this,"OTP Verified !",Toast.LENGTH_SHORT).show();
+
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(ForgotPasswordOTPEntryActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
 
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(ForgotPasswordOTPEntryActivity.this,"verification failed: " + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForgotPasswordOTPEntryActivity.this,"Verification Failed: " + e, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
-                Toast.makeText(ForgotPasswordOTPEntryActivity.this,"Code sent",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForgotPasswordOTPEntryActivity.this,"OTP Sent !",Toast.LENGTH_SHORT).show();
             }
         };
     }

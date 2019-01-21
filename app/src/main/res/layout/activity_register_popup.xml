@@ -38,7 +38,7 @@
             android:gravity="center"
             android:text="We will send OTP"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <View
             android:layout_width="match_parent"
@@ -68,14 +68,15 @@
             <EditText
                 android:id="@+id/et_phoneno"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:textColor="#fff"
+                android:layout_weight="1"
                 android:background="@drawable/text_view_border"
                 android:fontFamily="@font/notosansregular"
                 android:gravity="center"
-                android:textAlignment="center" />
+                android:inputType="number"
+                android:textAlignment="center"
+                android:textColor="#fff" />
 
         </LinearLayout>
 

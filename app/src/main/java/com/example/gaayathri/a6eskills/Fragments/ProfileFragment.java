@@ -28,8 +28,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.a6eskills.Activites.AboutUsActivity;
 import com.example.gaayathri.a6eskills.Activites.LoginActivity;
+import com.example.gaayathri.a6eskills.Activites.RedeemActivity;
 import com.example.gaayathri.a6eskills.Activites.SkillsActivity;
 import com.example.gaayathri.a6eskills.Activites.Subskill2Activity;
+import com.example.gaayathri.a6eskills.Activites.UserDataActivity;
+import com.example.gaayathri.a6eskills.Activites.UserMoreDataActivity;
 import com.example.gaayathri.a6eskills.R;
 import com.github.loadingview.LoadingView;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -141,7 +144,7 @@ public class ProfileFragment extends Fragment {
         tvlevel2.setText(level2);
         tvPoints.setText(textToBePlaced);
 
-        if(profilepicurl.equals("null")){
+        if(profilepicurl.equals("")){
             //Toast.makeText(getActivity(), "url: " + profilepicurl, Toast.LENGTH_SHORT).show();
             profilepicurl = "https://firebasestorage.googleapis.com/v0/b/seskills-master.appspot.com/o/boss.png?alt=media&token=7f1d6ae9-6d63-486a-8795-2229981b0989";
         }
@@ -159,6 +162,16 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 editProfile.show();
                 profileUpdate(secretkey);
+            }
+        });
+
+        Button btnRedeem = view.findViewById(R.id.btnRedeem);
+        btnRedeem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homeintent = new Intent(getActivity(), RedeemActivity.class);
+                startActivity(homeintent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
             }
         });
 

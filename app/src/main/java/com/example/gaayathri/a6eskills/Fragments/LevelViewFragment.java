@@ -245,7 +245,7 @@ public class LevelViewFragment extends Fragment {
                                 public void onFailure(Call call, IOException e) {
                                     String mMessage = e.getMessage();
                                     Log.w("failure Response", mMessage);
-                                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show());
+                                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Technical Error.Kindly,Contact support !", Toast.LENGTH_SHORT).show());
 
                                 }
 

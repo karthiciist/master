@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                                 jsonObject.put("password", password);
                                 jsonObject.put("countrycode", countrycode);
 
-                            } catch (JSONException e) {
+                            } catch (JSONException e) { 
                                 e.printStackTrace();
                             }
                             loadingDialog.show();

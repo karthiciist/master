@@ -17,36 +17,71 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/TvSkillname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Datascience Interview"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/TvTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Specialized in Data Mining, Data Visualization"/>
+            android:layout_height="wrap_content"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Candidate name : Santhosh"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date : 27-12-2018"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="for  "/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Time : 5.30 PM"/>
+            <TextView
+                android:id="@+id/TvCompanyname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Additional notes : Candidate is from Accenture with 6 years of experience"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From date:  "/>
+
+            <TextView
+                android:id="@+id/TvFromdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To date:  "/>
+
+            <TextView
+                android:id="@+id/TvTodate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

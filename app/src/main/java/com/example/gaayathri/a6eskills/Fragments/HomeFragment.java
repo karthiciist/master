@@ -127,10 +127,13 @@ public class HomeFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
+            sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
+            String apikey = sharedpreferences.getString("secretkey", "");
+
             Request profilerequest = new Request.Builder()
                     .url("http://6eskills.com:8080/uat/api/v1/user/interview/my/interview")
                     .get()
-                    .addHeader("apikey", "$2a$10$QznwjFXyXthudTbX84kYHuSfi2RMUZPdVq1FDZ1NR/MUA6N5udOF2")
+                    .addHeader("apikey", apikey)
                     .build();
 
             // Getting response from the client
@@ -163,9 +166,11 @@ public class HomeFragment extends Fragment {
             ArrayList<String> skillidList = new ArrayList<String>();
             ArrayList<String> skillnameList = new ArrayList<String>();
 
+            JSONArray jsonArray = null;
+
             try {
 
-                JSONArray jsonArray = new JSONArray(serverResponse) ;
+                jsonArray = new JSONArray(serverResponse) ;
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject explrObject = jsonArray.getJSONObject(i);
@@ -216,7 +221,7 @@ public class HomeFragment extends Fragment {
             }
 
             // Setting array adapter
-            final MyListAdapter myListAdapter = new MyListAdapter(getActivity(), nameList, agidList, interviewidList, titleList, companyidList, companynameList, descList, statusList, positionfromList, positiontoList, packegefromList, packegetoList, currencycodeList, montlyoryearlyList, fromdateList, todateList, skillidList, skillnameList);
+            final MyListAdapter myListAdapter = new MyListAdapter(getActivity(), nameList, agidList, interviewidList, titleList, companyidList, companynameList, descList, statusList, positionfromList, positiontoList, packegefromList, packegetoList, currencycodeList, montlyoryearlyList, fromdateList, todateList, skillidList, skillnameList, jsonArray);
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override

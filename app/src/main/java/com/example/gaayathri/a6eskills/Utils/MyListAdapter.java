@@ -1,6 +1,7 @@
 package com.example.gaayathri.a6eskills.Utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,15 @@ import android.widget.Toast;
 
 import com.example.gaayathri.a6eskills.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class MyListAdapter extends ArrayAdapter<String> {
+
+    Dialog scheduleDialod;
 
     private final Activity context;
     private final ArrayList<String> agid;
@@ -33,8 +40,9 @@ public class MyListAdapter extends ArrayAdapter<String> {
     private final ArrayList<String> todate;
     private final ArrayList<String> skillid;
     private final ArrayList<String> skillname;
+    private final JSONArray jsonArray;
 
-    public MyListAdapter(Activity context, ArrayList<String> agid, ArrayList<String> interviewid, ArrayList<String> title, ArrayList<String> companyid, ArrayList<String> companyname, ArrayList<String> desc, ArrayList<String> status, ArrayList<String> positionfrom, ArrayList<String> positionto, ArrayList<String> packegefrom, ArrayList<String> packegeto, ArrayList<String> currencycode, ArrayList<String> montlyoryearly, ArrayList<String> fromdate, ArrayList<String> todate, ArrayList<String> skillid, ArrayList<String> skillname, ArrayList<String> title1) {
+    public MyListAdapter(Activity context, ArrayList<String> agid, ArrayList<String> interviewid, ArrayList<String> title, ArrayList<String> companyid, ArrayList<String> companyname, ArrayList<String> desc, ArrayList<String> status, ArrayList<String> positionfrom, ArrayList<String> positionto, ArrayList<String> packegefrom, ArrayList<String> packegeto, ArrayList<String> currencycode, ArrayList<String> montlyoryearly, ArrayList<String> fromdate, ArrayList<String> todate, ArrayList<String> skillid, ArrayList<String> skillname, ArrayList<String> skillnameList, JSONArray jsonArray) {
         super(context, R.layout.listrowitem, title);
         this.context = context;
         this.agid = agid;
@@ -54,6 +62,7 @@ public class MyListAdapter extends ArrayAdapter<String> {
         this.todate = todate;
         this.skillid = skillid;
         this.skillname = skillname;
+        this.jsonArray = jsonArray;
     }
 
     /*public MyListAdapter(Activity context, String[] maintitle, String[] subtitle, Integer[] imgid, String[] skillname) {
@@ -95,7 +104,7 @@ public class MyListAdapter extends ArrayAdapter<String> {
         skillnametv.setText(agid.get(position));
         companynametv.setText(desc.get(position));
 
-        Toast.makeText(context, desc.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, desc.toString(), Toast.LENGTH_SHORT).show();
 
         /*agidtv.setText(agid.get(position));
         interviewidtv.setText(interviewid.get(position));
@@ -117,7 +126,65 @@ public class MyListAdapter extends ArrayAdapter<String> {
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, title.get(position), Toast.LENGTH_SHORT).show();
+
+                String interviewidString = title.get(position);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj= null;
+                    try {
+                        obj = jsonArray.getJSONObject(i);
+                        if(obj.getString("interviewid").equals(interviewidString))
+                        {
+                            String name = obj.getString("skillname");
+                            String agid = obj.getString("agid");
+                            String interviewid = obj.getString("interviewid");
+                            String title = obj.getString("title");
+                            String companyid = obj.getString("companyid");
+                            String companyname = obj.getString("companyname");
+                            String desc = obj.getString("desc");
+                            String status = obj.getString("status");
+                            String positionfrom = obj.getString("positionfrom");
+                            String positionto = obj.getString("positionto");
+                            String packegefrom = obj.getString("packegefrom");
+                            String packegeto = obj.getString("packegeto");
+                            String currencycode = obj.getString("currencycode");
+                            String montlyoryearly = obj.getString("montlyoryearly");
+                            String fromdate = obj.getString("fromdate");
+                            String todate = obj.getString("todate");
+                            String skillid = obj.getString("skillid");
+                            String skillname = obj.getString("skillname");
+
+                            //Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+
+                            scheduleDialod = new Dialog(getContext());
+                            scheduleDialod.setContentView(R.layout.dialog_schedule);
+
+                            TextView TvSkillname = scheduleDialod.findViewById(R.id.TvSkillname);
+                            TextView TvTitle = scheduleDialod.findViewById(R.id.TvTitle);
+                            TextView TvCompanyname = scheduleDialod.findViewById(R.id.TvCompanyname);
+                            TextView TvFromdate = scheduleDialod.findViewById(R.id.TvFromdate);
+                            TextView TvTodate = scheduleDialod.findViewById(R.id.TvTodate);
+
+                            TvSkillname.setText(skillname);
+                            TvTitle.setText(title);
+                            TvCompanyname.setText(companyname);
+                            TvFromdate.setText(fromdate);
+                            TvTodate.setText(todate);
+
+                            scheduleDialod.show();
+
+                            Button accept = scheduleDialod.findViewById(R.id.btnAccept);
+                            Button reject = scheduleDialod.findViewById(R.id.btnDecline);
+                            Button postpone = scheduleDialod.findViewById(R.id.btnPostpone);
+
+                            accept.setOnClickListener(v1 -> scheduleDialod.dismiss());
+                            reject.setOnClickListener(v1 -> scheduleDialod.dismiss());
+                            postpone.setOnClickListener(v1 -> scheduleDialod.dismiss());
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 

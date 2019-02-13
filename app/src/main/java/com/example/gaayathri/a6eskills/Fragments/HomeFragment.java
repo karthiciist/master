@@ -91,7 +91,6 @@ public class HomeFragment extends Fragment {
 
         //Toast.makeText(getActivity(), "URL: " + profilepicurl, Toast.LENGTH_SHORT).show();
 
-
         Button btnMore = view.findViewById(R.id.button8);
         btnMore.setOnClickListener(v -> {
             ProfileFragment profileFragment = new ProfileFragment();
@@ -101,12 +100,10 @@ public class HomeFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-
         Context cont = getActivity();
 
         AsyncTaskRunner runner = new AsyncTaskRunner(cont, view);
         runner.execute();
-
 
         return view;
     }
@@ -131,7 +128,7 @@ public class HomeFragment extends Fragment {
             String apikey = sharedpreferences.getString("secretkey", "");
 
             Request profilerequest = new Request.Builder()
-                    .url("http://6eskills.com:8080/uat/api/v1/user/interview/my/interview")
+                    .url("http://6eskills.com:8080/uat/api/v1/user/interview/list")
                     .get()
                     .addHeader("apikey", apikey)
                     .build();

@@ -245,7 +245,7 @@ public class LevelViewFragment extends Fragment {
                                 public void onFailure(Call call, IOException e) {
                                     String mMessage = e.getMessage();
                                     Log.w("failure Response", mMessage);
-                                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Technical Error.Kindly,Contact support !", Toast.LENGTH_SHORT).show());
+                                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), mMessage, Toast.LENGTH_SHORT).show());
 
                                 }
 
@@ -285,7 +285,8 @@ public class LevelViewFragment extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Toast.makeText(getActivity(), "Please login to continue", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getActivity(), "Please login to continue" + mMessage, Toast.LENGTH_LONG).show();
+                                                        Log.e("mMessage",mMessage);
                                                     }
                                                 });
 

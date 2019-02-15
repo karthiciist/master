@@ -246,19 +246,6 @@ public class HomeFragment extends Fragment {
             });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             // Accepted interviews listview
             Request acceptedInterviewsRequest = new Request.Builder()
                     .url("http://6eskills.com:8080/uat/api/v1/user/interview/accepted/list")
@@ -364,18 +351,7 @@ public class HomeFragment extends Fragment {
                     UIUtils.setListViewHeightBasedOnItems(listView);
                 }
             });
-
-
-
-
-
-
-
-
-
-
-
-
+            
 
             // Completed interviews listview
             Request completedInterviewsRequest = new Request.Builder()

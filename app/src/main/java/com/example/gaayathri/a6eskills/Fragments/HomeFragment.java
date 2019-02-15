@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.a6eskills.R;
@@ -75,7 +76,7 @@ public class HomeFragment extends Fragment {
         client = new OkHttpClient();
 
 
-        if(profilepicurl.equals("")){
+        if (profilepicurl.equals("")) {
             //Toast.makeText(getActivity(), "url: " + profilepicurl, Toast.LENGTH_SHORT).show();
             profilepicurl = "https://firebasestorage.googleapis.com/v0/b/seskills-master.appspot.com/o/boss.png?alt=media&token=7f1d6ae9-6d63-486a-8795-2229981b0989";
         }
@@ -96,7 +97,7 @@ public class HomeFragment extends Fragment {
             ProfileFragment profileFragment = new ProfileFragment();
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container,profileFragment);
+            fragmentTransaction.replace(R.id.container, profileFragment);
             fragmentTransaction.commit();
         });
 
@@ -116,9 +117,9 @@ public class HomeFragment extends Fragment {
         private Context mContext;
         private View rootView;
 
-        public AsyncTaskRunner(Context context, View rootView){
-            this.mContext=context;
-            this.rootView=rootView;
+        public AsyncTaskRunner(Context context, View rootView) {
+            this.mContext = context;
+            this.rootView = rootView;
         }
 
         @Override
@@ -127,8 +128,20 @@ public class HomeFragment extends Fragment {
             sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
             String apikey = sharedpreferences.getString("secretkey", "");
 
+
+
+
+
+
+
+
+
+
+
+
+            // Scheduled interviews listview
             Request profilerequest = new Request.Builder()
-                    .url("http://6eskills.com:8080/uat/api/v1/user/interview/list")
+                    .url("http://6eskills.com:8080/uat/api/v1/user/interview/scheduled/list")
                     .get()
                     .addHeader("apikey", apikey)
                     .build();
@@ -136,10 +149,12 @@ public class HomeFragment extends Fragment {
             // Getting response from the client
             Response profileresponse = null;
             String serverResponse = null;
+            JSONObject jsonObject = null;
             try {
                 profileresponse = client.newCall(profilerequest).execute();
                 serverResponse = profileresponse.body().string();
-            } catch (IOException e) {
+                jsonObject = new JSONObject(serverResponse);
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
 
@@ -167,7 +182,8 @@ public class HomeFragment extends Fragment {
 
             try {
 
-                jsonArray = new JSONArray(serverResponse) ;
+                jsonArray = new JSONArray();
+                jsonArray = jsonObject.getJSONArray("data");
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject explrObject = jsonArray.getJSONObject(i);
@@ -210,7 +226,7 @@ public class HomeFragment extends Fragment {
                     skillidList.add(skillid);
                     skillnameList.add(skillname);
 
-                    Log.d(name,"Output");
+                    Log.d(name, "Output");
                 }
 
             } catch (JSONException e) {
@@ -228,6 +244,251 @@ public class HomeFragment extends Fragment {
                     UIUtils.setListViewHeightBasedOnItems(listView);
                 }
             });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // Accepted interviews listview
+            Request acceptedInterviewsRequest = new Request.Builder()
+                    .url("http://6eskills.com:8080/uat/api/v1/user/interview/accepted/list")
+                    .get()
+                    .addHeader("apikey", apikey)
+                    .build();
+
+            // Getting response from the client
+            Response acceptedInterviewsResponse = null;
+            String acceptedInterviewsServerResponse = null;
+            JSONObject acceptedInterviewsjsonObject = null;
+            try {
+                acceptedInterviewsResponse = client.newCall(acceptedInterviewsRequest).execute();
+                acceptedInterviewsServerResponse = acceptedInterviewsResponse.body().string();
+                acceptedInterviewsjsonObject = new JSONObject(acceptedInterviewsServerResponse);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Looping through interviews and getting data
+            ArrayList<String> acceptedInterviewsnameList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsagidList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsinterviewidList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewstitleList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewscompanyidList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewscompanynameList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsdescList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsstatusList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewspositionfromList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewspositiontoList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewspackegefromList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewspackegetoList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewscurrencycodeList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsmontlyoryearlyList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsfromdateList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewstodateList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsskillidList = new ArrayList<String>();
+            ArrayList<String> acceptedInterviewsskillnameList = new ArrayList<String>();
+
+            JSONArray acceptedInterviewsjsonArray = null;
+
+            try {
+
+                acceptedInterviewsjsonArray = new JSONArray();
+                acceptedInterviewsjsonArray = acceptedInterviewsjsonObject.getJSONArray("data");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject explrObject = acceptedInterviewsjsonArray.getJSONObject(i);
+
+                    String name = explrObject.getString("skillname");
+                    String agid = explrObject.getString("agid");
+                    String interviewid = explrObject.getString("interviewid");
+                    String title = explrObject.getString("title");
+                    String companyid = explrObject.getString("companyid");
+                    String companyname = explrObject.getString("companyname");
+                    String desc = explrObject.getString("desc");
+                    String status = explrObject.getString("status");
+                    String positionfrom = explrObject.getString("positionfrom");
+                    String positionto = explrObject.getString("positionto");
+                    String packegefrom = explrObject.getString("packegefrom");
+                    String packegeto = explrObject.getString("packegeto");
+                    String currencycode = explrObject.getString("currencycode");
+                    String montlyoryearly = explrObject.getString("montlyoryearly");
+                    String fromdate = explrObject.getString("fromdate");
+                    String todate = explrObject.getString("todate");
+                    String skillid = explrObject.getString("skillid");
+                    String skillname = explrObject.getString("skillname");
+
+                    acceptedInterviewsnameList.add(name);
+                    acceptedInterviewsagidList.add(agid);
+                    acceptedInterviewsinterviewidList.add(interviewid);
+                    acceptedInterviewstitleList.add(title);
+                    acceptedInterviewscompanyidList.add(companyid);
+                    acceptedInterviewscompanynameList.add(companyname);
+                    acceptedInterviewsdescList.add(desc);
+                    acceptedInterviewsstatusList.add(status);
+                    acceptedInterviewspositionfromList.add(positionfrom);
+                    acceptedInterviewspositiontoList.add(positionto);
+                    acceptedInterviewspackegefromList.add(packegefrom);
+                    acceptedInterviewspackegetoList.add(packegeto);
+                    acceptedInterviewscurrencycodeList.add(currencycode);
+                    acceptedInterviewsmontlyoryearlyList.add(montlyoryearly);
+                    acceptedInterviewsfromdateList.add(fromdate);
+                    acceptedInterviewstodateList.add(todate);
+                    acceptedInterviewsskillidList.add(skillid);
+                    acceptedInterviewsskillnameList.add(skillname);
+
+                    Log.d(name, "Output");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Setting array adapter
+            final MyListAdapter acceptedInterviewsMyListAdapter = new MyListAdapter(getActivity(), acceptedInterviewsnameList, acceptedInterviewsagidList, acceptedInterviewsinterviewidList, acceptedInterviewstitleList, acceptedInterviewscompanyidList, acceptedInterviewscompanynameList, acceptedInterviewsdescList, acceptedInterviewsstatusList, acceptedInterviewspositionfromList, acceptedInterviewspositiontoList, acceptedInterviewspackegefromList, acceptedInterviewspackegetoList, acceptedInterviewscurrencycodeList, acceptedInterviewsmontlyoryearlyList, acceptedInterviewsfromdateList, acceptedInterviewstodateList, acceptedInterviewsskillidList, acceptedInterviewsskillnameList, acceptedInterviewsjsonArray);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ListView listView = rootView.findViewById(R.id.accepted_interviews_list_view);
+                    listView.setAdapter(acceptedInterviewsMyListAdapter);
+                    UIUtils.setListViewHeightBasedOnItems(listView);
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // Completed interviews listview
+            Request completedInterviewsRequest = new Request.Builder()
+                    .url("http://6eskills.com:8080/uat/api/v1/user/interview/completed/list")
+                    .get()
+                    .addHeader("apikey", apikey)
+                    .build();
+
+            // Getting response from the client
+            Response completedInterviewsResponse = null;
+            String completedInterviewsServerResponse = null;
+            JSONObject completedInterviewsjsonObject = null;
+            try {
+                completedInterviewsResponse = client.newCall(completedInterviewsRequest).execute();
+                completedInterviewsServerResponse = completedInterviewsResponse.body().string();
+                completedInterviewsjsonObject = new JSONObject(completedInterviewsServerResponse);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Looping through interviews and getting data
+            ArrayList<String> completedInterviewsnameList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsagidList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsinterviewidList = new ArrayList<String>();
+            ArrayList<String> completedInterviewstitleList = new ArrayList<String>();
+            ArrayList<String> completedInterviewscompanyidList = new ArrayList<String>();
+            ArrayList<String> completedInterviewscompanynameList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsdescList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsstatusList = new ArrayList<String>();
+            ArrayList<String> completedInterviewspositionfromList = new ArrayList<String>();
+            ArrayList<String> completedInterviewspositiontoList = new ArrayList<String>();
+            ArrayList<String> completedInterviewspackegefromList = new ArrayList<String>();
+            ArrayList<String> completedInterviewspackegetoList = new ArrayList<String>();
+            ArrayList<String> completedInterviewscurrencycodeList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsmontlyoryearlyList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsfromdateList = new ArrayList<String>();
+            ArrayList<String> completedInterviewstodateList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsskillidList = new ArrayList<String>();
+            ArrayList<String> completedInterviewsskillnameList = new ArrayList<String>();
+
+            JSONArray completedInterviewsjsonArray = null;
+
+            try {
+
+                completedInterviewsjsonArray = new JSONArray();
+                completedInterviewsjsonArray = completedInterviewsjsonObject.getJSONArray("data");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject explrObject = completedInterviewsjsonArray.getJSONObject(i);
+
+                    String name = explrObject.getString("skillname");
+                    String agid = explrObject.getString("agid");
+                    String interviewid = explrObject.getString("interviewid");
+                    String title = explrObject.getString("title");
+                    String companyid = explrObject.getString("companyid");
+                    String companyname = explrObject.getString("companyname");
+                    String desc = explrObject.getString("desc");
+                    String status = explrObject.getString("status");
+                    String positionfrom = explrObject.getString("positionfrom");
+                    String positionto = explrObject.getString("positionto");
+                    String packegefrom = explrObject.getString("packegefrom");
+                    String packegeto = explrObject.getString("packegeto");
+                    String currencycode = explrObject.getString("currencycode");
+                    String montlyoryearly = explrObject.getString("montlyoryearly");
+                    String fromdate = explrObject.getString("fromdate");
+                    String todate = explrObject.getString("todate");
+                    String skillid = explrObject.getString("skillid");
+                    String skillname = explrObject.getString("skillname");
+
+                    completedInterviewsnameList.add(name);
+                    completedInterviewsagidList.add(agid);
+                    completedInterviewsinterviewidList.add(interviewid);
+                    completedInterviewstitleList.add(title);
+                    completedInterviewscompanyidList.add(companyid);
+                    completedInterviewscompanynameList.add(companyname);
+                    completedInterviewsdescList.add(desc);
+                    completedInterviewsstatusList.add(status);
+                    completedInterviewspositionfromList.add(positionfrom);
+                    completedInterviewspositiontoList.add(positionto);
+                    completedInterviewspackegefromList.add(packegefrom);
+                    completedInterviewspackegetoList.add(packegeto);
+                    completedInterviewscurrencycodeList.add(currencycode);
+                    completedInterviewsmontlyoryearlyList.add(montlyoryearly);
+                    completedInterviewsfromdateList.add(fromdate);
+                    completedInterviewstodateList.add(todate);
+                    completedInterviewsskillidList.add(skillid);
+                    completedInterviewsskillnameList.add(skillname);
+
+                    Log.d(name, "Output");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Setting array adapter
+            final MyListAdapter completedInterviewsMyListAdapter = new MyListAdapter(getActivity(), completedInterviewsnameList, completedInterviewsagidList, completedInterviewsinterviewidList, completedInterviewstitleList, completedInterviewscompanyidList, completedInterviewscompanynameList, completedInterviewsdescList, completedInterviewsstatusList, completedInterviewspositionfromList, completedInterviewspositiontoList, completedInterviewspackegefromList, completedInterviewspackegetoList, completedInterviewscurrencycodeList, completedInterviewsmontlyoryearlyList, completedInterviewsfromdateList, completedInterviewstodateList, completedInterviewsskillidList, completedInterviewsskillnameList, completedInterviewsjsonArray);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ListView listView = rootView.findViewById(R.id.accepted_interviews_list_view);
+                    listView.setAdapter(completedInterviewsMyListAdapter);
+                    UIUtils.setListViewHeightBasedOnItems(listView);
+                }
+            });
+
+
+
+
+
+
+
 
 
         /*ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,android.R.id.text1, items);
